@@ -6,12 +6,12 @@ using UnityEngine;
 [Serializable]
 public class TileRelation
 {
-	public TileCellSugoroku toTile;
-	public bool Movable;
+	public TileCellSugoroku ToTile { get; private set; }
+	public bool Movable { get; private set; }
 
 	public TileRelation(TileCellSugoroku tile)
 	{
-		toTile = tile;
+		ToTile = tile;
 	}
 
 }
@@ -20,18 +20,31 @@ public class TileCellSugoroku : MonoBehaviour
 {
 	[SerializeField] private List<TileRelation> relations = new List<TileRelation>();
 
-	public int needStep = 1;
-	public int nowStep = -1;
+	[SerializeField]
+	private TextMesh number;
 
-	[SerializeField] internal TextMesh number;
-	[SerializeField] internal GameObject enableEffect;
+	[SerializeField]
+	private GameObject enableEffect;
+
+	private int needStep = 1;
+	private int nowStep = -1;
+
+	public void OnMouseDown()
+	{
+		if (!enableEffect.activeInHierarchy)
+		{
+			return;
+		}
+
+		UnitMoveController.Instance.MoveToUnit(this);
+	}
 
 
 	private bool IsMovable(TileCellSugoroku toTile)
 	{
 		foreach (var relation in relations)
 		{
-			if (relation.toTile == toTile)
+			if (relation.ToTile == toTile)
 			{
 				return relation.Movable;
 			}
@@ -39,8 +52,6 @@ public class TileCellSugoroku : MonoBehaviour
 
 		return false;
 	}
-
-
 
 	public void SetStep(int count)
 	{
@@ -63,12 +74,10 @@ public class TileCellSugoroku : MonoBehaviour
 
 		foreach (var relation in relations)
 		{
-			if (IsMovable(relation.toTile))
+			if (IsMovable(relation.ToTile))
 			{
-				var nextStepCount = count - relation.toTile.needStep;
-				relation.toTile.SetStep(nextStepCount);
-
-
+				var nextStepCount = count - relation.ToTile.needStep;
+				relation.ToTile.SetStep(nextStepCount);
 			}
 		}
 	}
@@ -93,17 +102,6 @@ public class TileCellSugoroku : MonoBehaviour
 
 		enableEffect = transform.Find("Plane").gameObject;
 		number = GetComponentInChildren<TextMesh>();
-	}
-
-	public void OnMouseDown()
-	{
-		if (!enableEffect.activeInHierarchy)
-		{
-			return;
-		}
-
-
-		UnitMoveController.Instance.MoveToUnit(this);
 	}
 
 	public void MoveEnd()

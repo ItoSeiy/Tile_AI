@@ -6,7 +6,13 @@ using UnityEngine;
 
 public class TileSetting : MonoBehaviour
 {
-	[ContextMenu("AddTileCell")]
+    private void Start()
+    {
+		TileCellSetRelations();	
+    }
+
+
+    [ContextMenu("AddTileCell")]
 	public void AddTileCell()
 	{
 		var mastGameObject = GetComponentsInChildren<Transform>().Select(t => t.gameObject);

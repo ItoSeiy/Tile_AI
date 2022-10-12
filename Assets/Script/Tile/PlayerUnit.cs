@@ -1,41 +1,44 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerUnit : MonoBehaviour
 {
-	[SerializeField] private TileCell nowPositionTile;
-	[SerializeField] private TileCellSugoroku nowPositionTileSugoroku;
+	[SerializeField]
+	private TileCell _nowPositionTile;
 
-	[SerializeField] private int stepValue;
+	[SerializeField]
+	private TileCellSugoroku _nowPositionTileSugoroku;
 
+	[SerializeField]
+	private int _stepValue;
 
 	public void SetMoveTile(TileCell tile)
 	{
-		nowPositionTile = tile;
-		this.transform.position = nowPositionTile.transform.position;
+		_nowPositionTile = tile;
+		transform.position = new Vector3(_nowPositionTile.transform.position.x,
+											  transform.position.y,
+											  _nowPositionTile.transform.position.z);
 	}
 
 	public void SetMoveTile(TileCellSugoroku tile)
 	{
-		nowPositionTileSugoroku = tile;
-		this.transform.position = nowPositionTileSugoroku.transform.position;
+		_nowPositionTileSugoroku = tile;
+		transform.position = new Vector3(_nowPositionTileSugoroku.transform.position.x,
+										 transform.position.y,
+										 _nowPositionTileSugoroku.transform.position.z);
 	}
 
 	public void OnMouseDown()
 	{
-		if (nowPositionTile)
+		if (_nowPositionTile)
 		{
-			nowPositionTile.SetStep(stepValue);
+			_nowPositionTile.SetStep(_stepValue);
 		}
 
-		if (nowPositionTileSugoroku)
+		if (_nowPositionTileSugoroku)
 		{
-			nowPositionTileSugoroku.SetStep(stepValue);
+			_nowPositionTileSugoroku.SetStep(_stepValue);
 		}
 
 		UnitMoveController.Instance.SetMoveUnit(this);
 	}
-
-
 }

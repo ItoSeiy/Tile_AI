@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
 public class TileCell : MonoBehaviour
 {
 	[SerializeField]
-	internal List<TileCell> borderOnTiles;
+	private List<TileCell> _borderOnTiles;
 
-	public int needStep = 1;
-	public int nowStep = -1;
+	[SerializeField] 
+	private TextMesh _number;
 
-	[SerializeField] internal TextMesh number;
-	[SerializeField] internal GameObject enableEffect;
+	[SerializeField] 
+	private GameObject _enableEffect;
+
+	private int needStep = 1;
+	private int nowStep = -1;
 
 	public virtual void SetStep(int count)
 	{
@@ -22,22 +23,21 @@ public class TileCell : MonoBehaviour
 			return;
 		}
 
-		number.text = count.ToString();
+		_number.text = count.ToString();
 		nowStep = count;
 
-		enableEffect.SetActive(true);
+		_enableEffect.SetActive(true);
 
-		foreach (var tile in borderOnTiles)
+		foreach (var tile in _borderOnTiles)
 		{
 			var nextStepCount = count - tile.needStep;
 			tile.SetStep(nextStepCount);
 		}
 	}
 
-
 	public void SetRelation(List<TileCell> cells)
 	{
-		borderOnTiles.Clear();
+		_borderOnTiles.Clear();
 		foreach (var cell in cells)
 		{
 			if (cell == this)
@@ -48,25 +48,25 @@ public class TileCell : MonoBehaviour
 			float distance = Vector3.Distance(cell.transform.position, this.transform.position);
 			if (distance < 1.1f)
 			{
-				borderOnTiles.Add(cell);
+				_borderOnTiles.Add(cell);
 			}
 		}
 	}
 
 	public void OnMouseDown()
 	{
-		if (!enableEffect.activeInHierarchy)
+		if (!_enableEffect.activeInHierarchy)
 		{
 			return;
 		}
-
 
 		UnitMoveController.Instance.MoveToUnit(this);
 	}
 
 	public void MoveEnd()
 	{
-		enableEffect.SetActive(false);
+		_enableEffect.SetActive(false);
+		_number.text = string.Empty;
 		nowStep = -1;
 	}
 }

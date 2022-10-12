@@ -4,52 +4,51 @@ using UnityEngine;
 
 public class PuzzleController : SingletonMonoBehaviour<PuzzleController>
 {
-	public List<PuzzleCell> connectCells = new List<PuzzleCell>();
-	private bool searching;
+	public List<PuzzleCell> _connectCells { get; private set; } = new List<PuzzleCell>();
 
-	public GameObject deleteText;
+	[SerializeField]
+	private GameObject _deleteText;
 
-	public bool guardClick;
+	public bool GuardClick { get; private set; }
 
 	public void AddConnect(PuzzleCell cell)
 	{
-		connectCells.Add(cell);
+		_connectCells.Add(cell);
 		cell.ConnectSearch = true;
 	}
 
 	public bool IsConnected(PuzzleCell cell)
 	{
-		return connectCells.Contains(cell);
+		return _connectCells.Contains(cell);
 	}
 
 	public IEnumerator StartSearchConnect()
 	{
-		guardClick = true;
+		GuardClick = true;
 
-		connectCells.Clear();
+		_connectCells.Clear();
 		yield return null;
-		if (connectCells.Count >= 4)
+		if (_connectCells.Count >= 4)
 		{
 			yield return StartCoroutine(Delete());
 		}
 
-		guardClick = false;
+		GuardClick = false;
 	}
 
 	private IEnumerator Delete()
 	{
-		deleteText.SetActive(true);
+		_deleteText.SetActive(true);
 
 		yield return new WaitForSeconds(0.1f);
-		foreach (var cell in connectCells)
+		foreach (var cell in _connectCells)
 		{
 			yield return new WaitForSeconds(0.1f);
-			cell.enableEffect.SetActive(false);
+			cell.EnableEffect.SetActive(false);
 		}
 
-
 		yield return new WaitForSeconds(1f);
-		connectCells.Clear();
-		deleteText.SetActive(false);
+		_connectCells.Clear();
+		_deleteText.SetActive(false);
 	}
 }

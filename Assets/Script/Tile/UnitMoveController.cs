@@ -1,23 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class UnitMoveController : SingletonMonoBehaviour<UnitMoveController>
+﻿public class UnitMoveController : SingletonMonoBehaviour<UnitMoveController>
 {
-	private PlayerUnit unitItendedToMove;
-	private TileCell[] allTiles;
-	private TileCellSugoroku[] allSugorokuTiles;
+	private PlayerUnit _unitItendedToMove;
+	private TileCell[] _allTiles;
+	private TileCellSugoroku[] _allSugorokuTiles;
+
+	private void Awake()
+	{
+		_allTiles = GetComponentsInChildren<TileCell>();
+		_allSugorokuTiles = GetComponentsInChildren<TileCellSugoroku>();
+		print(_allTiles.Length);
+	}
 
 	public void SetMoveUnit(PlayerUnit target)
 	{
-		unitItendedToMove = target;
+		_unitItendedToMove = target;
 	}
 
 	public void MoveToUnit(TileCell moveToTile)
 	{
-		unitItendedToMove.SetMoveTile(moveToTile);
+		_unitItendedToMove.SetMoveTile(moveToTile);
 
-		foreach (var tile in allTiles)
+		foreach (var tile in _allTiles)
 		{
 			tile.MoveEnd();
 		}
@@ -25,18 +28,11 @@ public class UnitMoveController : SingletonMonoBehaviour<UnitMoveController>
 
 	public void MoveToUnit(TileCellSugoroku moveToTile)
 	{
-		unitItendedToMove.SetMoveTile(moveToTile);
+		_unitItendedToMove.SetMoveTile(moveToTile);
 
-		foreach (var tile in allSugorokuTiles)
+		foreach (var tile in _allSugorokuTiles)
 		{
 			tile.MoveEnd();
 		}
 	}
-
-	private void Awake()
-	{
-		allTiles = GetComponentsInChildren<TileCell>();
-		allSugorokuTiles = GetComponentsInChildren<TileCellSugoroku>();
-	}
-
 }
