@@ -8,7 +8,6 @@
 	{
 		_allTiles = GetComponentsInChildren<TileCell>();
 		_allSugorokuTiles = GetComponentsInChildren<TileCellSugoroku>();
-		print(_allTiles.Length);
 	}
 
 	public void SetMoveUnit(PlayerUnit target)
