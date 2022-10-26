@@ -2487,13 +2487,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerTurnFinish: {fileID: 0}
   _playerUnits:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 113844581}
+  - {fileID: 2121310423}
+  - {fileID: 18780018}
   _enemyUnits:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2025727134}
+  - {fileID: 1034854226}
+  - {fileID: 577725022}
 --- !u!1001 &1660119197
 PrefabInstance:
   m_ObjectHideFlags: 0
