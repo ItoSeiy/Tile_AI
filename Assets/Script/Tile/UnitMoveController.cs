@@ -1,6 +1,8 @@
-﻿public class UnitMoveController : SingletonMonoBehaviour<UnitMoveController>
+﻿using UnityEngine;
+
+public class UnitMoveController : SingletonMonoBehaviour<UnitMoveController>
 {
-	private PlayerUnit _unitItendedToMove;
+	private UnitBase _unitItendedToMove;
 	private TileCell[] _allTiles;
 	private TileCellSugoroku[] _allSugorokuTiles;
 

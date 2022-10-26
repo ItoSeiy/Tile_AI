@@ -1,7 +1,12 @@
 using UnityEngine;
+using System;
 
 public abstract class UnitBase : MonoBehaviour
 {
+	public bool MoveAble => _moveAble;
+
+	public event Action OnMoveEnd;
+
 	[SerializeField]
 	protected TileCell _nowPositionTile;
 
@@ -11,12 +16,16 @@ public abstract class UnitBase : MonoBehaviour
 	[SerializeField]
 	protected int _stepValue;
 
-	public virtual void SetMoveTile(TileCell tile)
+	protected bool _moveAble = false;
+
+    public virtual void SetMoveTile(TileCell tile)
     {
 		_nowPositionTile = tile;
 		transform.position = new Vector3(_nowPositionTile.transform.position.x,
-											  transform.position.y,
-											  _nowPositionTile.transform.position.z);
+										 transform.position.y,
+										 _nowPositionTile.transform.position.z);
+
+		OnMoveEnd?.Invoke();
 	}
 
     public virtual void SetMoveTile(TileCellSugoroku tile)
@@ -27,4 +36,9 @@ public abstract class UnitBase : MonoBehaviour
 										 transform.position.y,
 										 _nowPositionTileSugoroku.transform.position.z);
 	}
+
+	public void SetMoveAble(bool active)
+    {
+		_moveAble = active;
+    }
 }

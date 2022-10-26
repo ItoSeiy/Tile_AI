@@ -2,6 +2,8 @@
 {
 	public void OnMouseDown()
 	{
+		if (!_moveAble) return;
+
 		if (_nowPositionTile)
 		{
 			_nowPositionTile.SetStep(_stepValue);

@@ -13,24 +13,34 @@ public class TileCell : MonoBehaviour
 	[SerializeField] 
 	private GameObject _enableEffect;
 
-	private int needStep = 1;
-	private int nowStep = -1;
+	private readonly int NEED_STEP = 1;
+	private int _nowStep = -1;
+
+	public void OnMouseDown()
+	{
+		if (!_enableEffect.activeInHierarchy)
+		{
+			return;
+		}
+
+		UnitMoveController.Instance.MoveToUnit(this);
+	}
 
 	public virtual void SetStep(int count)
 	{
-		if (count < 0 || nowStep > count)
+		if (count < 0 || _nowStep > count)
 		{
 			return;
 		}
 
 		_number.text = count.ToString();
-		nowStep = count;
+		_nowStep = count;
 
 		_enableEffect.SetActive(true);
 
 		foreach (var tile in _borderOnTiles)
 		{
-			var nextStepCount = count - tile.needStep;
+			var nextStepCount = count - tile.NEED_STEP;
 			tile.SetStep(nextStepCount);
 		}
 	}
@@ -53,20 +63,10 @@ public class TileCell : MonoBehaviour
 		}
 	}
 
-	public void OnMouseDown()
-	{
-		if (!_enableEffect.activeInHierarchy)
-		{
-			return;
-		}
-
-		UnitMoveController.Instance.MoveToUnit(this);
-	}
-
 	public void MoveEnd()
 	{
 		_enableEffect.SetActive(false);
 		_number.text = string.Empty;
-		nowStep = -1;
+		_nowStep = -1;
 	}
 }
