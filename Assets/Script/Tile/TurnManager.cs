@@ -16,6 +16,10 @@ public class TurnManager : MonoBehaviour
 
     private Trun _currentTurn;
 
+    private EnemyUnit _currentEnemyUnit = null;
+
+    private int _currentEnemyIndex;
+
     private void Start()
     {
         SetEvents();
@@ -38,7 +42,8 @@ public class TurnManager : MonoBehaviour
             x.OnMoveEnd += () =>
             {
                 x.SetMoveAble(false);
-                CheckTrunFinish();
+                if(!CheckTrunFinish())
+                    IncrementEnemyTurn();
             };
         });
 
@@ -52,45 +57,75 @@ public class TurnManager : MonoBehaviour
         if (result == 0)
         {
             SetPlayerTrun();
-            _currentTurn = Trun.Player;
             print($"ターンの抽選の結果は{result} Player");
         }
         else
         {
             SetEnemyTurn();
-            _currentTurn = Trun.Enemy;
             print($"ターンの抽選の結果は{result} Enemy");
         }
     }
 
     private void SetPlayerTrun()
     {
-        _playerUnits.ForEach(x => x.SetMoveAble(true));
+        Init();
 
-        _enemyUnits.ForEach(x => x.SetMoveAble(false));
+        _currentTurn = Trun.Player;
+        print($"ターンが{_currentTurn}になった");
+
+        _playerUnits.ForEach(x => x.SetMoveAble(true));
 
         _playerTurnFinish.interactable = true;
     }
 
     private void SetEnemyTurn()
     {
+        Init();
+
+        _currentTurn = Trun.Enemy;
+        print($"ターンが{_currentTurn}になった");
+
         _enemyUnits.ForEach(x => x.SetMoveAble(true));
 
-        _playerUnits.ForEach(x => x.SetMoveAble(false));
+        IncrementEnemyTurn();
 
-        _playerTurnFinish.interactable= false;
+        _playerTurnFinish.interactable = false;
     }
 
-    private void CheckTrunFinish()
+    private bool CheckTrunFinish()
     {
         if(_currentTurn == Trun.Player && _playerUnits.All(x => !x.MoveAble))
         {
             SetEnemyTurn();
+            return true;
         }
         else if(_currentTurn == Trun.Enemy && _enemyUnits.All(x => !x.MoveAble))
         {
             SetPlayerTrun();
+            return true;
         }
+
+        return false;
+    }
+
+    private void IncrementEnemyTurn()
+    {
+        _currentEnemyIndex++;
+        print(_currentEnemyIndex);
+        _currentEnemyUnit = _enemyUnits[_currentEnemyIndex];
+        print($"現在の敵のUnitは{_currentEnemyUnit.gameObject.name}");
+
+        new EnemyAI(_currentEnemyUnit);
+    }
+
+    private void Init()
+    {
+        print("Init");
+        _playerUnits.ForEach(x => x.SetMoveAble(false));
+        _enemyUnits.ForEach(x => x.SetMoveAble(false));
+
+        _currentEnemyUnit = null;
+        _currentEnemyIndex = -1;
     }
 }
 

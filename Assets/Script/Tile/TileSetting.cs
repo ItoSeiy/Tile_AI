@@ -6,11 +6,10 @@ using UnityEngine;
 
 public class TileSetting : MonoBehaviour
 {
-    private void Start()
+    private void Awake()
     {
 		TileCellSetRelations();	
     }
-
 
     [ContextMenu("AddTileCell")]
 	public void AddTileCell()

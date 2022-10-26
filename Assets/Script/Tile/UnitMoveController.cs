@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using System;
 
 public class UnitMoveController : SingletonMonoBehaviour<UnitMoveController>
 {
@@ -12,19 +12,19 @@ public class UnitMoveController : SingletonMonoBehaviour<UnitMoveController>
 		_allSugorokuTiles = GetComponentsInChildren<TileCellSugoroku>();
 	}
 
-	public void SetMoveUnit(PlayerUnit target)
+	public void SetMoveUnit(UnitBase target)
 	{
 		_unitItendedToMove = target;
 	}
 
 	public void MoveToUnit(TileCell moveToTile)
 	{
-		_unitItendedToMove.SetMoveTile(moveToTile);
-
 		foreach (var tile in _allTiles)
 		{
 			tile.MoveEnd();
 		}
+
+		_unitItendedToMove.SetMoveTile(moveToTile);
 	}
 
 	public void MoveToUnit(TileCellSugoroku moveToTile)
